@@ -63,6 +63,7 @@ public class PlayerInteractionController : MonoBehaviour
     IEnumerator GamePauseCoroutine()
     {
         GameObject shockWave = ObjectPoolManager.SpawnObject(shockWavePrefab, transform);
+        ShakeCamera();
         GameManager.Instance.PauseGame();
 
         yield return new WaitForSeconds(0.75f);
@@ -79,7 +80,7 @@ public class PlayerInteractionController : MonoBehaviour
         }
     }
 
-    public void ShakeCamera()
+    private void ShakeCamera()
     {
         if (cameraTransform != null)
         {

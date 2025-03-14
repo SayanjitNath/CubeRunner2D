@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_DissolveShader
-  m_Shader: {fileID: -6465566751694194690, guid: e3e7020d00575a94ca75861e790a8f6b, type: 3}
+  m_Name: PlayerMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: 05e49ec7c05543646833c391fdd855df, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,14 +41,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _DissolveAmount: 0
-    - _DissolveScale: 30
-    - _OutlineThickness: 0.065
-    - _SpiralStrength: 7
+    - _Emission: 6.69
     m_Colors:
-    - _OutlineColor: {r: 0, g: 13.223903, b: 15.999998, a: 1}
+    - _EmissionColor: {r: 11.984315, g: 0.75294125, b: 0, a: 1}
   m_BuildTextureStacks: []
---- !u!114 &4919067758806400134
+--- !u!114 &8308000485465903110
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

@@ -197,60 +197,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 42437569}
   m_CullTransparentMesh: 1
---- !u!1 &66688929
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 66688931}
-  - component: {fileID: 66688930}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &66688930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66688929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d7b86f68f0b7dd41bf5983b8dea897f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgSoundClip: {fileID: 0}
-  _soundToggle: 1
-  _musicToggle: 1
-  characterButtonSound: {fileID: 0}
-  menuButtonSound: {fileID: 0}
-  wheelButtonSound: {fileID: 0}
-  sketchingSound: {fileID: 0}
-  playButtonAudio: {fileID: 0}
-  cancelButtonAudio: {fileID: 0}
-  cameraButtonSound: {fileID: 0}
---- !u!4 &66688931
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 66688929}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &147687842
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,8 +466,9 @@ GameObject:
   - component: {fileID: 211744389}
   - component: {fileID: 211744388}
   - component: {fileID: 211744390}
+  - component: {fileID: 211744391}
   m_Layer: 0
-  m_Name: GameManager
+  m_Name: All Managers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -546,6 +493,7 @@ MonoBehaviour:
   scrollSpeedController: {fileID: 402965520}
   interactableController: {fileID: 765253828}
   playerHealth: {fileID: 731215127}
+  playerController: {fileID: 731215125}
   playerHealthPointUI: {fileID: 2027316880}
   jumpButton: {fileID: 1341219128}
   gameOverPanel: {fileID: 1022115370}
@@ -578,6 +526,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2169073c4d9e3e44a930828ea60e9f61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &211744391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 211744387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d7b86f68f0b7dd41bf5983b8dea897f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bgSoundClip: {fileID: 0}
+  _soundToggle: 1
+  _musicToggle: 1
+  characterButtonSound: {fileID: 0}
+  menuButtonSound: {fileID: 0}
+  wheelButtonSound: {fileID: 0}
+  sketchingSound: {fileID: 0}
+  playButtonAudio: {fileID: 0}
+  cancelButtonAudio: {fileID: 0}
+  cameraButtonSound: {fileID: 0}
 --- !u!1 &260350456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1904,7 +1874,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 15
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0.899909, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -1964,9 +1934,9 @@ MonoBehaviour:
   orbzCollectionParticle: {fileID: 6876933859834819631, guid: d44cf8aca0fa5ba46815060a09b84d28, type: 3}
   shockWavePrefab: {fileID: 8040548660560878781, guid: d3b32ea7def740146947a5f0339291b1, type: 3}
   cameraTransform: {fileID: 519420032}
-  duration: 0.5
-  strength: 0.5
-  vibrato: 10
+  duration: 0.3
+  strength: 1
+  vibrato: 20
   orbCollectClip: {fileID: 8300000, guid: 926073615ad104d4ab8f989a2dd53119, type: 3}
   obstacleCollisionClip: {fileID: 8300000, guid: bac8d9034eecd4646a68d6866d4e2c0f, type: 3}
 --- !u!114 &731215127
@@ -3762,4 +3732,3 @@ SceneRoots:
   - {fileID: 1719608565}
   - {fileID: 765253829}
   - {fileID: 211744389}
-  - {fileID: 66688931}
