@@ -21,8 +21,8 @@ public class InteractableController : MonoBehaviour
     private float spawnIntervalMultiplier = 1f;
     private float minSpawnMultiplier = 0.5f;
     private bool isSpawning = true;
-    private bool lastSpawnedWasObstacle = false; 
     private int orbzSpawnCount = 0;
+    private int obstacleSpawnCount = 0;
     private List<GameObject> spawnedObjects = new List<GameObject>();
     private Coroutine spawningCoroutine;
 
@@ -108,23 +108,25 @@ public class InteractableController : MonoBehaviour
 
             GameObject toSpawn;
 
-            if (lastSpawnedWasObstacle)
+            if (obstacleSpawnCount >= 2)
             {
                 toSpawn = orbzPrefab;
+                obstacleSpawnCount = 0;
                 orbzSpawnCount++;
             }
             else if (orbzSpawnCount >= 2)
             {
                 toSpawn = obstaclePrefab;
                 orbzSpawnCount = 0;
+                obstacleSpawnCount++;
             }
             else
             {
                 toSpawn = Random.value > 0.5f ? orbzPrefab : obstaclePrefab;
                 orbzSpawnCount = (toSpawn == orbzPrefab) ? orbzSpawnCount + 1 : 0;
+                obstacleSpawnCount = (toSpawn == obstaclePrefab) ? obstacleSpawnCount + 1 : 0;
             }
 
-            lastSpawnedWasObstacle = (toSpawn == obstaclePrefab);
 
             float minY = -3f;
             float maxY = 0f;
