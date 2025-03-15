@@ -31,12 +31,12 @@ This is the only control in the game.
 
 The game features a neon-style aesthetic with glowing shaders.
 
-Background scrolling, shockwave, and diffusion effects are implemented using Shader Graph.
+Background scrolling, shockwave, and dissolve effects are implemented using Shader Graph.
 
 
 ⚙️ Technical Details
 
-Shader Graphs for glowing effects, background scrolling, shockwave, and diffusion effects.
+Shader Graphs for glowing effects, background scrolling, shockwave, and dissolve effects.
 
 Object Pooling is used for optimized performance.
 
