@@ -73,16 +73,13 @@ public class GameManager : MonoBehaviour
         playerHighScore = PlayerPrefs.GetInt("HighScore");
 
 
-        float cameraHeight = Camera.main.orthographicSize * 2;
-        float cameraWidth = cameraHeight * Camera.main.aspect;
-
-        ghostPlayerTransform.position = new Vector2(xOffset - cameraWidth * 0.5f, ghostPlayerTransform.position.y);
+        ResetGhostPlayerTransform();
 
         playerHealthPointUI.InitialSetUp();
         playerHealth.InitialSetUp();
 
-        scrollSpeedController.SetScrollSpeed(bgScrollSpeed);
-        interactableController.SetSpeed(interactableMoveSpeed);
+        scrollSpeedController.SetScrollSpeed(bgScrollSpeed, true);
+        interactableController.SetSpeed(interactableMoveSpeed, true);
     }
 
 
@@ -100,6 +97,14 @@ public class GameManager : MonoBehaviour
 
     private void ResetScore() => playerScore = 0;
 
+    private void ResetGhostPlayerTransform()
+    {
+        float cameraHeight = Camera.main.orthographicSize * 2;
+        float cameraWidth = cameraHeight * Camera.main.aspect;
+
+        ghostPlayerTransform.position = new Vector2(xOffset - cameraWidth * 0.5f, ghostPlayerTransform.position.y);
+    }
+
     public int GetCurrentScore() => playerScore;
 
     public int GetHighScore() => playerHighScore;
@@ -110,24 +115,17 @@ public class GameManager : MonoBehaviour
     public void PauseGame()
     {
         jumpButton.enabled = false;
-
         playerController.LockYPosition();  
-
         scrollSpeedController.StopScrolling();
-
         interactableController.StopSpawning(0f);
-
     }
 
     public void PlayGame()
     {
-        scrollSpeedController.ResumeScrolling();
-
-        interactableController.StartSpawning(interactableMoveSpeed);
-
-        jumpButton.enabled = true;
-
         playerController.UnlockYPosition();
+        scrollSpeedController.ResumeScrolling();
+        interactableController.StartSpawning(interactableMoveSpeed);
+        jumpButton.enabled = true;
     }
 
     public void GameOver()

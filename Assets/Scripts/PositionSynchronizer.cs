@@ -12,7 +12,7 @@ public class PositionSynchronizer : MonoBehaviour
     Queue<float> positionBuffer = new Queue<float>();
 
 
-    void Update()
+    void FixedUpdate()
     {
         positionBuffer.Enqueue(playerTransform.position.y);
 

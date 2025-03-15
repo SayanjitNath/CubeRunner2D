@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,13 +13,18 @@ public class InteractableController : MonoBehaviour
     [SerializeField] private float maxSpawnInterval = 2500;
     [SerializeField] private float speed = 5f;
 
-    [SerializeField] private bool isSpawning = true;   
 
     private float spawnX;
     private float despawnX = -40f;
     private float xOffset = 5f;
+    private float speedMultiplier = 1f;
+    private float spawnIntervalMultiplier = 1f;
+    private float minSpawnMultiplier = 0.5f;
+    private bool isSpawning = true;
+    private bool lastSpawnedWasObstacle = false; 
+    private int orbzSpawnCount = 0;
     private List<GameObject> spawnedObjects = new List<GameObject>();
-    private CancellationTokenSource cancellationTokenSource;
+    private Coroutine spawningCoroutine;
 
 
     void Start()
@@ -31,6 +37,11 @@ public class InteractableController : MonoBehaviour
     {
         MoveObjects();
         DespawnObjects();
+
+        // Increase Interactable Move speed with time
+        speedMultiplier += Time.deltaTime * 0.01f;
+        // Decrease Interactable
+        spawnIntervalMultiplier = Mathf.Max(minSpawnMultiplier, spawnIntervalMultiplier - Time.deltaTime * 0.005f);
     }
 
     private void MoveObjects()
@@ -43,7 +54,7 @@ public class InteractableController : MonoBehaviour
                 continue;
             }
 
-            spawnedObjects[i].transform.position += Vector3.left * speed * Time.deltaTime;
+            spawnedObjects[i].transform.position += Vector3.left * speed * speedMultiplier * Time.deltaTime;
         }
     }
 
@@ -59,7 +70,6 @@ public class InteractableController : MonoBehaviour
 
             if (spawnedObjects[i].transform.position.x <= despawnX)
             {
-                //Destroy(spawnedObjects[i]);
                 ObjectPoolManager.ReturnObjectToPool(spawnedObjects[i]);
                 spawnedObjects.RemoveAt(i);
             }
@@ -68,71 +78,74 @@ public class InteractableController : MonoBehaviour
 
     public void StartSpawning(float updatedSpeed)
     {
-        SetSpeed(updatedSpeed);
+        SetSpeed(updatedSpeed, false);
         isSpawning = true;
-        cancellationTokenSource = new CancellationTokenSource();
-        SpawnObjects(cancellationTokenSource.Token);
+
+        if (spawningCoroutine != null)
+            StopCoroutine(spawningCoroutine);
+
+        spawningCoroutine = StartCoroutine(SpawnObjects());
     }
 
     public void StopSpawning(float updatedSpeed)
     {
-        SetSpeed(updatedSpeed);
+        SetSpeed(updatedSpeed, false);
         isSpawning = false;
 
-        cancellationTokenSource?.Cancel();
-        cancellationTokenSource?.Dispose();
-        cancellationTokenSource = null;
-    }
-
-    async void SpawnObjects(CancellationToken token)
-    {
-        while (!token.IsCancellationRequested)
+        if (spawningCoroutine != null)
         {
-            try
-            {
-                if (!isSpawning)
-                {
-                    await Task.Delay(500); // Wait a bit before checking again
-                    continue;
-                }
-
-                await Task.Delay(Random.Range((int)minSpawnInterval, (int)maxSpawnInterval), token);
-
-                if (token.IsCancellationRequested || !isSpawning) return;
-
-
-                GameObject toSpawn = Random.value > 0.5f ? orbzPrefab : obstaclePrefab;
-
-                float minY = -3f;
-                float maxY = 0f;
-                float randomY = Random.Range(minY, maxY);
-
-                if (toSpawn == obstaclePrefab) randomY = minY;
-
-                //GameObject spawnedObject = Instantiate(toSpawn, new Vector3(spawnX, randomY, 0), Quaternion.identity);
-                GameObject spawnedObject = ObjectPoolManager.SpawnObject(toSpawn,
-                    new Vector3(spawnX, randomY, 0), Quaternion.identity, ObjectPoolManager.PoolType.GameObject);
-
-                spawnedObjects.Add(spawnedObject);
-            }
-            catch (TaskCanceledException)
-            {
-                return;
-            }
+            StopCoroutine(spawningCoroutine);
+            spawningCoroutine = null;
         }
     }
 
-    public void SetSpeed(float speed) => this.speed = speed;
-
-
-
-    void OnDestroy()
+    private IEnumerator SpawnObjects()
     {
-        if (cancellationTokenSource != null)
+        while (isSpawning)
         {
-            cancellationTokenSource?.Cancel();
-            cancellationTokenSource?.Dispose();
-            cancellationTokenSource = null;
+
+            if (!isSpawning) yield break ;
+
+            GameObject toSpawn;
+
+            if (lastSpawnedWasObstacle)
+            {
+                toSpawn = orbzPrefab;
+                orbzSpawnCount++;
+            }
+            else if (orbzSpawnCount >= 2)
+            {
+                toSpawn = obstaclePrefab;
+                orbzSpawnCount = 0;
+            }
+            else
+            {
+                toSpawn = Random.value > 0.5f ? orbzPrefab : obstaclePrefab;
+                orbzSpawnCount = (toSpawn == orbzPrefab) ? orbzSpawnCount + 1 : 0;
+            }
+
+            lastSpawnedWasObstacle = (toSpawn == obstaclePrefab);
+
+            float minY = -3f;
+            float maxY = 0f;
+            float randomY = (toSpawn == obstaclePrefab) ? minY : Random.Range(minY, maxY);
+
+            GameObject spawnedObject = ObjectPoolManager.SpawnObject(toSpawn,
+                new Vector3(spawnX, randomY, 0), Quaternion.identity, ObjectPoolManager.PoolType.GameObject);
+
+            spawnedObjects.Add(spawnedObject);
+            
+            yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval) * spawnIntervalMultiplier);
+        }
+    }
+
+    public void SetSpeed(float speed, bool resetMultipliers)
+    {
+        this.speed = speed;
+        if (resetMultipliers)
+        {
+            speedMultiplier = 1f;
+            spawnIntervalMultiplier = 1f;
         }
     }
 }

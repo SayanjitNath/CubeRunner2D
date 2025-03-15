@@ -70,11 +70,12 @@ public class PlayerController : MonoBehaviour
 
     public void LockYPosition()
     {
-        rb.constraints |= RigidbodyConstraints2D.FreezePositionY;
+        rb.isKinematic = true;
+        rb.velocity = Vector2.zero;
     }
 
     public void UnlockYPosition()
     {
-        rb.constraints &= ~RigidbodyConstraints2D.FreezePositionY;
+        rb.isKinematic = false;
     }
 }
